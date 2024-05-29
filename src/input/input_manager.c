@@ -5,11 +5,31 @@
 
 static struct InputManager input_manager = {0};
 
+struct InputManager*	_getInputManager() {
+	return &input_manager;
+}
+
+void	setKeyboardBinding(unsigned int id, KeyboardKey key) {
+	if (id >= input_manager.keyboard_bindings_count || !input_manager.keyboard_bindings_path) {
+		return;
+	}
+	input_manager.keyboard_bindings[id] = key;
+}
+
+void setAndSaveKeyboardBinding(unsigned int id, KeyboardKey key) {
+	setKeyboardBinding(id, key);
+	saveKeyboardBindings(
+		input_manager.keyboard_bindings_path,
+		input_manager.keyboard_bindings,
+		input_manager.keyboard_bindings_count
+	);
+}
+
 void	parseGamepadBindings(char* bindings_path, GamepadButton** gamepad_buttons, unsigned int* gamepad_bingings_count) {
 
 }
 
-void	inputManagerInitialize(void* default_keyboard_bindings, void* default_gamepad_bindings) {
+void	inputManagerInitialize(char* default_keyboard_bindings, char* default_gamepad_bindings) {
 	input_manager.keyboard_bindings = 0;
 	input_manager.keyboard_bindings_count = 0;
 	input_manager.gamepad_bindings = 0;
@@ -17,6 +37,7 @@ void	inputManagerInitialize(void* default_keyboard_bindings, void* default_gamep
 
 	if (default_keyboard_bindings) {
 		parseKeyboardBindings(default_keyboard_bindings, &input_manager.keyboard_bindings, &input_manager.keyboard_bindings_count);
+		input_manager.keyboard_bindings_path = default_keyboard_bindings;
 	}
 	if (default_gamepad_bindings) {
 		parseGamepadBindings(default_gamepad_bindings, &input_manager.gamepad_bindings, &input_manager.gamepad_bindings_count);

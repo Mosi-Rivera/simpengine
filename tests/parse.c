@@ -7,6 +7,7 @@
 #include <raylib.h>
 #include <stdio.h>
 #include "../include/input_manager.h"
+
 #define SCENES_COUNT 2
 
 void	testNullTermination() {
@@ -59,6 +60,29 @@ void	testBindingsParse() {
 	
 }
 
+void testSetBinding() {
+	inputManagerInitialize("./test_assets/set_bindings.csv", 0);
+	setAndSaveKeyboardBinding(0, 0);
+	setAndSaveKeyboardBinding(1, 1);
+	inputManagerUninitialize();
+	inputManagerInitialize("./test_assets/set_bindings.csv", 0);
+	struct InputManager* input_manager = _getInputManager();
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings_count, 2);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[0], 0);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[1], 1);
+	setAndSaveKeyboardBinding(0, 10);
+	setAndSaveKeyboardBinding(1, 20);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[0], 10);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[1], 20);
+	inputManagerUninitialize();
+	inputManagerInitialize("./test_assets/set_bindings.csv", 0);
+	input_manager = _getInputManager();
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings_count, 2);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[0], 10);
+	CU_ASSERT_EQUAL(input_manager->keyboard_bindings[1], 20);
+	inputManagerUninitialize();
+}
+
 int initSuite() {
 	return 0;
 }
@@ -77,6 +101,8 @@ int	main(void) {
 	CU_add_test(suite, "Parse Size.", testParseSize);
 
 	CU_add_test(suite, "Parse bindings.", testBindingsParse);
+
+	CU_add_test(suite, "Set bindings.", testSetBinding);
 
 	CU_basic_set_mode(CU_BRM_VERBOSE);
 

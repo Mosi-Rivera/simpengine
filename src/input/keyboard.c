@@ -39,12 +39,33 @@ KeyboardKey*	newKeyboardBindings(unsigned int size) {
 	return key_bindings;
 }
 
+void	saveKeyboardBindings(char* path, KeyboardKey* bindings, unsigned int bindings_size) {
+	if (!path) {
+		return;
+	}
+	FILE* file = fopen(path, "w");
+	if (file == 0) {
+		perror("Error trying to open bindings file for write.");
+		exit(1);
+	}
 
+	file = freopen(path, "a", file);
+	if (file == 0) {
+		perror("Error while trying to reopen file");
+		exit(1);
+	}
 
+	fprintf(file, "%d\nid, key", bindings_size);
+	for (unsigned int i = 0; i < bindings_size; i++) {
+		fprintf(file, "\n%d, %d", i, bindings[i]);
+	}
+	fclose(file);
+}
 
 void	parseKeyboardBindings(char* bindings_path, KeyboardKey** keyboard_bindings, unsigned int* keyboard_bindings_count) {
 	FILE* file = fopen(bindings_path, "r");
 	char line[MAX_BINDINGS_LINE_LENGTH];
+	unsigned int count = 0;
 	unsigned int size;
 	unsigned int id;
 	KeyboardKey key;
@@ -63,12 +84,14 @@ void	parseKeyboardBindings(char* bindings_path, KeyboardKey** keyboard_bindings,
 		exit(1);
 	}
 
-	while (fgets(line, sizeof(line), file) != NULL) {
+	while (fgets(line, sizeof(line), file) != NULL && count < size) {
 		parseKeyboardBindingsLine(line, &id, &key);
 		if (id >= size) {
 			perror("Error: Invalid binding id. Corrupted file.");
 		}
-
+		// if ((*keyboard_bindings)[id] == 0) {
+		// 	count++;
+		// }
 		(*keyboard_bindings)[id] = key;
 	}
 	fclose(file);
