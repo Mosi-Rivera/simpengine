@@ -12,85 +12,85 @@
 void	testPauseAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_PAUSE, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_PAUSE, 0, FRAME_COUNT, 8);
 	unsigned int i = 0;
 
 	do {
 		animationUpdate(&animation, animation.time_to_next_frame + 1);
-		CU_ASSERT_EQUAL(animation.current_frame, 0);
+		CU_ASSERT_EQUAL(animation.current_frame_index, 0);
 		i++;
 	} while (i < FRAME_COUNT);
 	animationUpdate(&animation, animation.time_to_next_frame + 1);
-	CU_ASSERT_EQUAL(animation.current_frame, 0);
+	CU_ASSERT_EQUAL(animation.current_frame_index, 0);
 }
 
 void	testSimpleAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_SIMPLE, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_SIMPLE, 0, FRAME_COUNT, 8);
 	unsigned int i = 0;
 
 	do {
-		CU_ASSERT_EQUAL(animation.current_frame, i++);
+		CU_ASSERT_EQUAL(animation.current_frame_index, i++);
 		animationUpdate(&animation, animation.time_to_next_frame + 1);
 	} while (i < FRAME_COUNT);
 	animationUpdate(&animation, animation.time_to_next_frame + 1);
-	CU_ASSERT_EQUAL(animation.current_frame, FRAME_COUNT - 1);
+	CU_ASSERT_EQUAL(animation.current_frame_index, FRAME_COUNT - 1);
 }
 
 void	testRepeatAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_REPEAT, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_REPEAT, 0, FRAME_COUNT, 8);
 
 	for (unsigned int j = 0; j < TEST_ITERATIONS; j++) {
 		unsigned int i = 0;
 		do {
-			CU_ASSERT_EQUAL(animation.current_frame, i++);
+			CU_ASSERT_EQUAL(animation.current_frame_index, i++);
 			animationUpdate(&animation, animation.time_to_next_frame + 1);
 		} while (i < FRAME_COUNT);
-		CU_ASSERT_EQUAL(animation.current_frame, 0);
+		CU_ASSERT_EQUAL(animation.current_frame_index, 0);
 	}
 }
 
 void	testReverseAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_REVERSE, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_REVERSE, 0, FRAME_COUNT, 8);
 
 	for (unsigned int i = FRAME_COUNT; i--;) {
-		CU_ASSERT_EQUAL(animation.current_frame, i);
+		CU_ASSERT_EQUAL(animation.current_frame_index, i);
 		animationUpdate(&animation, animation.time_to_next_frame + 1);
 	}
-	CU_ASSERT_EQUAL(animation.current_frame, 0);
+	CU_ASSERT_EQUAL(animation.current_frame_index, 0);
 }
 
 void	testRepeateReverseAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_REVERSE_REPEAT, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_REVERSE_REPEAT, 0, FRAME_COUNT, 8);
 
 	for (unsigned int j = 0; j < TEST_ITERATIONS; j++) {
 		for (unsigned int i = FRAME_COUNT; i--;) {
-			CU_ASSERT_EQUAL(animation.current_frame, i);
+			CU_ASSERT_EQUAL(animation.current_frame_index, i);
 			animationUpdate(&animation, animation.time_to_next_frame + 1);
 		}
-		CU_ASSERT_EQUAL(animation.current_frame, FRAME_COUNT - 1);
+		CU_ASSERT_EQUAL(animation.current_frame_index, FRAME_COUNT - 1);
 	}
 }
 
 void	testYoyoAnimation() {
 	struct Animation animation = {0};
 
-	animationInitialize(&animation, ANIMATION_YOYO, FRAME_COUNT, 8);
+	animationInitialize(&animation, ANIMATION_YOYO, 0, FRAME_COUNT, 8);
 
 	for (unsigned int j = 0; j < TEST_ITERATIONS; j++) {
 		for (unsigned int i = 0; i < FRAME_COUNT; i++) {
-			CU_ASSERT_EQUAL(animation.current_frame, i);
+			CU_ASSERT_EQUAL(animation.current_frame_index, i);
 			animationUpdate(&animation, animation.time_to_next_frame + 1);
 		}
 		for (unsigned int i = FRAME_COUNT - 1; i-- > 1;) {
-			CU_ASSERT_EQUAL(animation.current_frame, i);
+			CU_ASSERT_EQUAL(animation.current_frame_index, i);
 			animationUpdate(&animation, animation.time_to_next_frame + 1);
 		}
 	}
