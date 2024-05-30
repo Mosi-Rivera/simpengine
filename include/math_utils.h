@@ -7,5 +7,7 @@ int min_int(int a, int b);
 int max_int(int a, int b);
 char min_char(char a, char b);
 char max_char(char a, char b);
+unsigned int min_uint(unsigned int a, unsigned int b);
+unsigned int max_uint(unsigned int a, unsigned int b);
 
 #endif

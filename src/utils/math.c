@@ -14,6 +14,14 @@ int max_int(int a, int b) {
 	return a > b ? a : b;
 }
 
+unsigned int min_uint(unsigned int a, unsigned int b) {
+	return a < b ? a : b;
+}
+
+unsigned int max_uint(unsigned int a, unsigned int b) {
+	return a > b ? a : b;
+}
+
 char min_char(char a, char b) {
 	return a < b ? a : b;
 }

@@ -2,9 +2,9 @@
 #define SIMPLE_ENGINE_H
 #include "./config.h"
 #include "./scene_manager.h"
-#include "./scenes.h"
 #include "./shader_manager.h"
 #include "./shaders.h"
+#include "./state_manager.h"
 #include "./scale.h"
 
 struct SimpleEngineConfig {
