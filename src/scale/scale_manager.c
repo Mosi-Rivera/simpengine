@@ -36,7 +36,7 @@ void	resizeForce(void) {
 	offset_y = (float)(screenHeight - ((float)virtual_height * scale)) / 2;
 }
 
-void	handleResize(RenderTexture2D* scale_texture) {
+void	handleResize() {
 	if (IsWindowResized()) {
 		resizeForce();
 	}

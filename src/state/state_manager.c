@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../../include/state_manager.h"
 
-void	pushStateHistory(struct StateManager* state_manager) {
+void pushStateHistory(struct StateManager* state_manager) {
 	struct StateHistory* state_history = &state_manager->state_history;
 
 	state_history->history[state_history->end] = state_manager->active_state;

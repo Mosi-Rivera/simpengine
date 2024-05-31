@@ -1,11 +1,13 @@
 #ifndef SIMPLE_ENGINE_H
 #define SIMPLE_ENGINE_H
+#include <raylib.h>
 #include "./config.h"
 #include "./scene_manager.h"
 #include "./shader_manager.h"
 #include "./shaders.h"
 #include "./state_manager.h"
 #include "./scale.h"
+#include "./animation.h"
 
 struct SimpleEngineConfig {
 	struct ShaderData* shaders;
