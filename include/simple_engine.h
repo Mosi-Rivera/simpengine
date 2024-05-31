@@ -8,6 +8,8 @@
 #include "./state_manager.h"
 #include "./scale.h"
 #include "./animation.h"
+#include "./input_manager.h"
+#include "./math_utils.h"
 
 struct SimpleEngineConfig {
 	struct ShaderData* shaders;

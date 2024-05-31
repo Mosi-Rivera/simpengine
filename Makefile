@@ -9,7 +9,7 @@ LIBDIR = lib
 TESTDIR = tests
 
 # Compiler flags
-CFLAGS = -Wall -Wextra -shared -fPIC -lraylib -lm -lpthread -ldl -lrt -I$(INCDIR)
+CFLAGS = -Wall -Wextra -I$(INCDIR)
 
 # Test files
 TESTS := $(wildcard $(TESTDIR)/**/*.c) $(wildcard $(TESTDIR)/*.c)
@@ -21,22 +21,27 @@ SRCS := $(shell find $(SRCDIR) -type f -name '*.c')
 OBJS := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 # Library name
-LIB_NAME = libsimpengine.so
+LIB_NAME = libsimpengine.a
 
 # Targets
 TARGET = my_program
 
 # Default target
-all: $(LIB_NAME)
+all: $(LIBDIR)/$(LIB_NAME)
 
 # Compile .c files to .o files
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Export shared library target
-$(LIB_NAME): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $(LIBDIR)/$(LIB_NAME)
+# Create static library target
+$(LIBDIR)/$(LIB_NAME): $(OBJS)
+	@mkdir -p $(LIBDIR)
+	ar rcs $@ $^
+
+# Compile main program with static library
+$(TARGET): main.c $(LIBDIR)/$(LIB_NAME)
+	$(CC) $(CFLAGS) -L$(LIBDIR) -lsimpengine main.c -o $(TARGET) -lm -lpthread -ldl -lrt -lraylib
 
 # Run target
 run: $(TARGET)
@@ -50,4 +55,4 @@ valgrind: $(TARGET)
 clean:
 	rm -rf $(OBJDIR) $(TARGET) $(LIBDIR)/$(LIB_NAME)
 
-.PHONY: all clean
+.PHONY: all clean run valgrind
